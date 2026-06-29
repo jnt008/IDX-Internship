@@ -1,0 +1,11 @@
+# ignore node_modules folder because npm can recreate it by running "npm install"
+node_modules/
+
+# ignore the .env file because it contains sensitive info (database usernames, passwords, and API keys)
+.env
+
+#ignore the .DS_Store file because it is automatically generated and not part of the project
+.DS_Store
+
+# ignore SQL database dump files
+*.sql
