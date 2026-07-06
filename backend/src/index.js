@@ -4,6 +4,9 @@ const express = require('express');
 const cors = require('cors');
 // import the MySQL connection pool created in src/db/mysql.js
 const pool = require('./db/mysql');
+
+const propertiesRouter = require('./routes/properties');
+
 // load the environment variables from the .env file
 require('dotenv').config();
 
@@ -16,6 +19,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 // automatically parse JSON requests
 app.use(express.json());
+//use the properties routes
+app.use('/api/properties', propertiesRouter);
 
 // create a GET endpoint at "/api/health"
 app.get('/api/health', async (req, res) => {
