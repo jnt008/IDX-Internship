@@ -27,7 +27,7 @@ docker --version
 From the backend directory:
 
 ```bash
-docker compose up -d
+docker start idx-mysql-local
 ```
 
 Verify the container is running:
@@ -157,7 +157,7 @@ Expected response:
 Start MySQL:
 
 ```bash
-docker compose up -d
+docker start idx-mysql-local
 ```
 
 Start the backend:
