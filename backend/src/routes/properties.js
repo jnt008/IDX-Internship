@@ -7,6 +7,104 @@ const router = express.Router();
 //import the MySQL connection pool
 const pool = require('../db/mysql');
 
+//function to validate a property listing ID before using it
+function validateListingId(id) {
+    //check if the id is missing or only contains spaces
+    if (!id || id.trim() === '') {
+        return {
+            valid: false,
+            error: 'Listing ID is required'
+        };
+    }
+    //prevent long IDs from being sent to database (protects against invalid input and unnessary queries)
+    if(id.length > 50){
+        return{
+            valid: false,
+            error: 'Listing ID is too long'
+        };
+    }
+    //if the checks pass then the ID is valid
+    return{
+        valid: true
+    };
+}
+
+//GET open houses for one specific property
+router.get('/:id/openhouses', async (req, res) => {
+    try{
+        // get the property ID from the URL
+        const {id} = req.params;
+
+        const validation = validateListingId(id);
+
+        if (!validation.valid) {
+            return res.status(400).json({
+                error: validation.error
+            });
+        }
+        
+        // check if property actually exists
+        const [propertyCheck] = await pool.query('SELECT L_ListingID FROM rets_property WHERE L_ListingID = ?', [id]);
+
+        //if no property was found, return a 404 error
+        if(propertyCheck.length === 0){
+            return res.status(404).json({
+                error: 'Property not found',
+                message: `No property exists with ID: ${id}`
+            });
+        }
+
+        //if property exists, get all open houses for that property
+        const [openhouses] = await pool.query('SELECT * FROM rets_openhouse WHERE L_ListingID = ? ORDER BY OpenHouseDate, OH_StartTime', [id]);
+
+        //send the open house results back as JSON
+        res.json({
+            propertyId: id,
+            count: openhouses.length,
+            openhouses: openhouses
+        });
+    } catch (error) {
+        //if there is something wrong with the database/query, return a 500 error
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Failed to fetch open houses' });
+    }
+});
+
+// GET details for one specific property
+router.get('/:id', async (req, res) => {
+    try {
+        //ger the property ID from the URL
+        const {id} = req.params;
+
+        //run validateListingId on the ID
+        const validation = validateListingId(id);
+
+        //if validation fails, immediately return a 400 bad request
+        if(!validation.valid){
+            return res.status(400).json({
+                error: validation.error
+            });
+        }
+
+        //search the property table for a matching listing ID
+        const [results] = await pool.query('SELECT * FROM rets_property WHERE L_ListingID = ?', [id]);
+
+        //if there are no properties found, return a 404 error
+        if(results.length === 0){
+            return res.status(404).json({
+                error: 'Property not found',
+                message: `No property exists with ID: ${id}`
+            });
+        }
+        //since ID should only match one property, return the first result
+        res.json(results[0]);
+    } catch (error){
+        //if something is wrong with the database/query, return a 500 error
+        console.error('Database error:', error);
+        res.status(500).json({error: 'Failed to fetch property details'});
+    }
+});
+
 //GET /api/properties
 // this endpoint returns a page of properties from the database
 //supports pagination and filters
@@ -14,11 +112,11 @@ router.get('/', async (req, res) => {
     try {
         //read the limit value from the URL (/api/properties?limit=5)
         //if no limit is provided, use 20
-        const limit = parseInt(req.query.limit) || 20;
+        const limit = req.query.limit !== undefined ? parseInt(req.query.limit) : 20;
         //read the offset value from the URL(/api/properties?offset=10)
         //offset tells MySQL where to start reading rows
         //if no offset is provided, use 0
-        const offset = parseInt(req.query.offset) || 0;
+        const offset = req.query.offset !== undefined ? parseInt(req.query.offset) : 0;
 
         //get filter values from the query string
         const { city, zipcode, minPrice, maxPrice, beds, baths } = req.query;
