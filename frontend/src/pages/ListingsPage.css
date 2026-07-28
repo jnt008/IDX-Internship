@@ -38,7 +38,8 @@
 /* Lift the card slightly when the mouse hovers over it. */
 .property-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px hsl(278, 62%, 36%);
+    background-color: #a986d74d;
 }
 
 /* Set the size of the image container. */
@@ -69,13 +70,14 @@
 /* Add spacing around the property information. */
 .property-info {
     padding: 15px;
+    text-align: center;
 }
 
 /* Style the property price. */
 .price {
     font-size: 24px;
     font-weight: bold;
-    color: #1976d2;
+    color: #60339f;
     margin-bottom: 8px;
 }
 
@@ -96,7 +98,16 @@
 /* Display the property details in one row. */
 .property-details {
     display: flex;
+    justify-content: center;
     gap: 8px;
     font-size: 14px;
     color: #666;
+}
+
+/* Style the message shown when no properties match the filters. */
+.no-results {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
 }

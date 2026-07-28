@@ -1,0 +1,146 @@
+/* Style the entire filter form container. */
+.property-filters {
+    /* Light purple background to separate the filter area from the listings. */
+    background: #a986d74d;
+
+    /* Add space inside the container so the inputs aren't touching the edges. */
+    padding: 20px;
+
+    /* Round the corners of the filter box. */
+    border-radius: 8px;
+
+    /* Add space below the filter form before the property listings begin. */
+    margin-bottom: 30px;
+}
+
+/* Arrange all six filter inputs using CSS Grid. */
+.filter-row {
+    display: grid;
+
+    /* Automatically create as many columns as will fit.
+       Each column is at least 150px wide, but can grow to
+       evenly fill the available space. */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+    /* Add spacing between each filter. */
+    gap: 15px;
+
+    /* Separate the filters from the buttons below. */
+    margin-bottom: 15px;
+}
+
+/* Each filter group contains a label and its input/dropdown. */
+.filter-group {
+    display: flex;
+
+    /* Stack the label above the input instead of side-by-side. */
+    flex-direction: column;
+}
+
+/* Style the labels above each filter. */
+.filter-group label {
+    /* Slightly smaller text than normal body text. */
+    font-size: 14px;
+
+    /* Make labels a little bolder. */
+    font-weight: 500;
+
+    /* Add space between the label and its input. */
+    margin-bottom: 5px;
+
+    /* Dark gray text for readability. */
+    color: #333;
+}
+
+/* Style both text inputs and dropdown menus. */
+.filter-group input,
+.filter-group select {
+    /* Add space inside the input box. */
+    padding: 8px 12px;
+
+    /* Add a light gray border around each field. */
+    border: 1px solid #ddd;
+
+    /* Slightly round the corners. */
+    border-radius: 4px;
+
+    /* Set the text size inside the fields. */
+    font-size: 14px;
+}
+
+/* Change the appearance when an input is selected. */
+.filter-group input:focus,
+.filter-group select:focus {
+    /* Remove the browser's default blue outline. */
+    outline: none;
+
+    /* Highlight the selected input with a purple border. */
+    border-color: #60339f;
+}
+
+/* Container for the Search and Clear Filters buttons. */
+.filter-actions {
+    display: flex;
+
+    /* Center the buttons horizontally. */
+    justify-content: center;
+
+    /* Add space between the buttons. */
+    gap: 10px;
+}
+
+/* Apply shared styles to both buttons. */
+.btn-primary,
+.btn-secondary {
+    /* Make the buttons larger and easier to click. */
+    padding: 10px 20px;
+
+    /* Remove the default browser border. */
+    border: none;
+
+    /* Round the button corners. */
+    border-radius: 4px;
+
+    /* Set the text size. */
+    font-size: 16px;
+
+    /* Slightly bold button text. */
+    font-weight: 500;
+
+    /* Change the cursor to a hand when hovering. */
+    cursor: pointer;
+
+    /* Smoothly animate color changes on hover. */
+    transition: background-color 0.2s;
+}
+
+/* Style the Search button. */
+.btn-primary {
+    /* Purple background. */
+    background-color: #60339fd0;
+
+    /* White text. */
+    color: white;
+}
+
+/* Darken the Search button when hovered over. */
+.btn-primary:hover {
+    background-color: #60339f;
+}
+
+/* Style the Clear Filters button. */
+.btn-secondary {
+    /* White background. */
+    background-color: #fff;
+
+    /* Gray text. */
+    color: #666;
+
+    /* Add a gray border so it stands out on the white background. */
+    border: 1px solid #ddd;
+}
+
+/* Slightly darken the Clear button when hovered over. */
+.btn-secondary:hover {
+    background-color: #f5f5f5;
+}

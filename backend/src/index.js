@@ -20,12 +20,26 @@ app.use(cors());
 // automatically parse JSON requests
 app.use(express.json());
 
+// log every incoming request and its response status
 app.use((req, res, next) => {
-    //get the current date and time
-    const timestamp = new Date().toISOString();
-    //print the request information to the terminal
-    console.log(`[${timestamp}] ${req.method} ${req.url}`);
-    //continue to the next middleware or route
+
+    // save the start time
+    const start = Date.now();
+
+    // after Express finishes sending the response
+    res.on("finish", () => {
+
+        // calculate how long the request took
+        const duration = Date.now() - start;
+
+        console.log(
+            `[${new Date().toISOString()}] ` +
+            `${req.method} ${req.originalUrl} ` +
+            `${res.statusCode} ` +
+            `(${duration} ms)`
+        );
+    });
+
     next();
 });
 //use the properties routes
