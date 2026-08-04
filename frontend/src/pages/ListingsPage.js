@@ -7,6 +7,9 @@ import { fetchProperties } from "../api/client";
 //import the property filters component
 import PropertyFilters from "../components/PropertyFilters";
 
+//import the pagination
+import Pagination from "../components/Pagination";
+
 //import the css for this page
 import "./ListingsPage.css";
 
@@ -26,10 +29,14 @@ function ListingsPage() {
     //stores the filters selected by the user
     const [filters, setFilters] = useState({});
 
+    //tracks the current page
+    const [currentPage, setCurrentPage] = useState(1);
+
+    //stores how many properties appear on each page
+    const [itemsPerPage] = useState(20);
+
     //load properties when the first page appears or filters change
-    useEffect(() => {
-        loadProperties();
-    }, [filters]);
+    useEffect(() => {loadProperties();}, [filters, currentPage]);
 
     //request property data from the backend
     async function loadProperties() {
@@ -38,11 +45,14 @@ function ListingsPage() {
             setLoading(true);
             setError(null);
 
-            //combine the selected filters with the pagination values
+            // calculate how many properties to skip
+            const offset = (currentPage - 1) * itemsPerPage;
+
+            // combine filters with pagination
             const params = {
                 ...filters,
-                limit: 20,
-                offset: 0
+                limit: itemsPerPage,
+                offset: offset
             };
 
             //request the first 20 properties using the selected filters
@@ -60,10 +70,24 @@ function ListingsPage() {
         }
     }
 
-    //updates the filters when the user searches
     const handleSearch = (newFilters) => {
+        // save new filters
         setFilters(newFilters);
+
+        // go back to page 1 whenever filters change
+        setCurrentPage(1);
     };
+
+    // changes the current page
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+
+        // scroll back to the top
+        window.scrollTo(0, 0);
+    };
+
+    // calculate the total number of pages
+    const totalPages = Math.ceil(total / itemsPerPage);
 
     return (
         <div className="listings-page">
@@ -90,8 +114,9 @@ function ListingsPage() {
             {!loading && !error && (
                 <>
                     {/* Show how many properties are currently displayed. */}
-                    <p>
-                        Showing {properties.length} of {total} properties
+                    <p className="results-summary">
+                        Showing {((currentPage - 1) * itemsPerPage) + 1}–
+                        {Math.min(currentPage * itemsPerPage, total)} of {total} properties
                     </p>
 
                     {/* Show a message when no properties match the filters. */}
@@ -101,15 +126,24 @@ function ListingsPage() {
                             adjusting your filters.
                         </div>
                     ) : (
-                        /* Display the properties in a grid. */
-                        <div className="property-grid">
-                            {properties.map((property) => (
-                                <PropertyCard
-                                    key={property.L_ListingID}
-                                    property={property}
-                                />
-                            ))}
-                        </div>
+                        <>
+                            {/* Display the properties in a grid */}
+                            <div className="property-grid">
+                                {properties.map((property) => (
+                                    <PropertyCard
+                                        key={property.L_ListingID}
+                                        property={property}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Display the pagination controls */}
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        </>
                     )}
                 </>
             )}
