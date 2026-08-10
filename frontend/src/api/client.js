@@ -15,8 +15,34 @@ export async function fetchProperties(params = {}) {
         const response = await fetch(url);
 
         //throw error if request failed
-        if(!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}: ${response.statusText}`
+            );
+        }
+
+        //return the JSON response
+        return await response.json();
+    } catch (error) {
+        //print error
+        console.error("API Error:", error);
+        throw error;
+    }
+}
+
+//get details for one property
+export async function fetchPropertyDetail(listingId) {
+    try {
+        //send request for one property's data
+        const response = await fetch(
+            `${API_BASE}/api/properties/${listingId}`
+        );
+
+        //throw an error if request failed
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}: ${response.statusText}`
+            );
         }
 
         //return the JSON response
@@ -30,17 +56,22 @@ export async function fetchProperties(params = {}) {
 
 //get open houses for a property
 export async function fetchOpenHouses(listingId) {
-    try{
+    try {
         //send request for open house data
-        const response = await fetch(`${API_BASE}/api/properties/${listingId}/openhouses`);
-        
+        const response = await fetch(
+            `${API_BASE}/api/properties/${listingId}/openhouses`
+        );
+
         //throw an error if request failed
-        if(!response.ok){
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}: ${response.statusText}`
+            );
         }
+
         //return the JSON response
         return await response.json();
-    } catch (error){
+    } catch (error) {
         //print error
         console.error("API Error:", error);
         throw error;

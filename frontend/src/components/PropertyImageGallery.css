@@ -1,0 +1,282 @@
+/* styles the main property image */
+.gallery-main {
+    /* fills the available width */
+    width: 100%;
+
+    /* sets the height of the main image */
+    height: 400px;
+
+    /* shows a pointer when hovering */
+    cursor: pointer;
+
+    /* allows elements to be positioned inside */
+    position: relative;
+
+    /* displays a dark background behind the image */
+    background: #111;
+
+    /* rounds the corners */
+    border-radius: 8px;
+
+    /* hides anything outside the container */
+    overflow: hidden;
+}
+
+/* styles the main property image */
+.gallery-main-img {
+    /* fills the container */
+    width: 100%;
+    height: 100%;
+
+    /* crops the image to fit */
+    object-fit: cover;
+
+    /* removes extra spacing below the image */
+    display: block;
+
+    /* adds a fade effect */
+    transition: opacity 0.2s;
+}
+
+/* darkens the image when hovering */
+.gallery-main:hover .gallery-main-img {
+    opacity: 0.9;
+}
+
+/* styles the photo counter */
+.gallery-photo-count {
+    /* positions the counter in the bottom right */
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+
+    /* gives the counter a dark background */
+    background: rgba(0, 0, 0, 0.55);
+
+    /* makes the text white */
+    color: white;
+
+    /* sets the text size */
+    font-size: 13px;
+
+    /* adds space around the text */
+    padding: 4px 10px;
+
+    /* rounds the corners */
+    border-radius: 12px;
+}
+
+/* styles the thumbnail container */
+.gallery-thumbs {
+    /* displays thumbnails in a row */
+    display: flex;
+
+    /* adds space between thumbnails */
+    gap: 8px;
+
+    /* adds space above the thumbnails */
+    margin-top: 8px;
+
+    /* allows horizontal scrolling */
+    overflow-x: auto;
+
+    /* adds space below the thumbnails */
+    padding-bottom: 4px;
+}
+
+/* styles each thumbnail */
+.gallery-thumb {
+    /* sets the thumbnail size */
+    width: 80px;
+    height: 60px;
+
+    /* crops the image to fit */
+    object-fit: cover;
+
+    /* rounds the corners */
+    border-radius: 4px;
+
+    /* shows a pointer when hovering */
+    cursor: pointer;
+
+    /* slightly fades inactive thumbnails */
+    opacity: 0.65;
+
+    /* prevents thumbnails from shrinking */
+    flex-shrink: 0;
+
+    /* adds a transparent border */
+    border: 2px solid transparent;
+
+    /* animates hover and active effects */
+    transition: opacity 0.15s, border-color 0.15s;
+}
+
+/* brightens the thumbnail when hovering */
+.gallery-thumb:hover {
+    opacity: 0.9;
+}
+
+/* highlights the selected thumbnail */
+.gallery-thumb.active {
+    opacity: 1;
+    border-color: #1976d2;
+}
+
+/* styles the lightbox background */
+.lightbox-overlay {
+    /* covers the entire screen */
+    position: fixed;
+    inset: 0;
+
+    /* darkens the background */
+    background: rgba(0, 0, 0, 0.92);
+
+    /* centers the lightbox */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* keeps the lightbox above the page */
+    z-index: 1000;
+
+    /* removes the focus outline */
+    outline: none;
+}
+
+/* styles the lightbox image */
+.lightbox-img {
+    /* limits the image width */
+    max-width: 90vw;
+
+    /* limits the image height */
+    max-height: 88vh;
+
+    /* scales the image without cropping */
+    object-fit: contain;
+
+    /* rounds the corners */
+    border-radius: 4px;
+}
+
+/* styles the previous and next buttons */
+.lightbox-btn {
+    /* positions the buttons */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* gives the buttons a transparent background */
+    background: rgba(255, 255, 255, 0.15);
+
+    /* makes the arrows white */
+    color: white;
+
+    /* removes the default border */
+    border: none;
+
+    /* increases the arrow size */
+    font-size: 40px;
+
+    /* adds space inside the button */
+    padding: 8px 18px;
+
+    /* shows a pointer when hovering */
+    cursor: pointer;
+
+    /* rounds the corners */
+    border-radius: 6px;
+
+    /* keeps the buttons above the image */
+    z-index: 1001;
+
+    /* centers the arrow vertically */
+    line-height: 1;
+}
+
+/* positions the previous button */
+.lightbox-prev {
+    left: 20px;
+}
+
+/* positions the next button */
+.lightbox-next {
+    right: 20px;
+}
+
+/* changes the button color when hovering */
+.lightbox-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* styles the close button */
+.lightbox-close {
+    /* positions the button in the top right */
+    position: absolute;
+    top: 16px;
+    right: 20px;
+
+    /* gives the button a transparent background */
+    background: rgba(255, 255, 255, 0.15);
+
+    /* makes the icon white */
+    color: white;
+
+    /* removes the default border */
+    border: none;
+
+    /* sets the icon size */
+    font-size: 22px;
+
+    /* adds space inside the button */
+    padding: 6px 12px;
+
+    /* shows a pointer when hovering */
+    cursor: pointer;
+
+    /* rounds the corners */
+    border-radius: 4px;
+
+    /* keeps the button above the image */
+    z-index: 1001;
+}
+
+/* changes the close button color when hovering */
+.lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* styles the image counter */
+.lightbox-counter {
+    /* positions the counter at the bottom center */
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* colors the text */
+    color: rgba(255, 255, 255, 0.75);
+
+    /* sets the text size */
+    font-size: 14px;
+}
+
+/* displays a message when there are no images */
+.gallery-no-image {
+    /* centers the message */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* matches the height of the main image */
+    height: 400px;
+
+    /* colors the text gray */
+    color: #999;
+
+    /* displays a light gray background */
+    background: #f5f5f5;
+
+    /* rounds the corners */
+    border-radius: 8px;
+}

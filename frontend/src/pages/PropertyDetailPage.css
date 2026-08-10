@@ -1,0 +1,268 @@
+/* styles the full property detail page */
+.property-detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* styles the back button */
+.btn-back {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* changes the back button when hovering */
+.btn-back:hover {
+    background: #f5f5f5;
+    border-color: #1976d2;
+}
+
+/* adds spacing below the property header */
+.property-header {
+    margin-bottom: 20px;
+}
+
+/* styles the property price */
+.property-header h1 {
+    color: #1976d2;
+    margin: 0 0 10px 0;
+}
+
+/* styles the property address */
+.property-address {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 5px 0;
+}
+
+/* styles the city, state, and zip */
+.property-location {
+    color: #666;
+    margin: 5px 0;
+}
+
+/* styles the main image section */
+.property-image-main {
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+/* makes images fill the main image section 
+.property-image-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+*/
+
+/* creates the main page layout */
+.property-content {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 30px;
+}
+
+/* styles the property stats section */
+.property-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+/* centers each property stat */
+.stat {
+    text-align: center;
+}
+
+/* styles the stat number */
+.stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1976d2;
+}
+
+/* styles the stat label */
+.stat-label {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* adds spacing between property sections */
+.property-section {
+    margin-bottom: 30px;
+}
+
+/* styles the property section headings */
+.property-section h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* creates the property details layout */
+.detail-grid {
+    display: grid;
+    gap: 12px;
+}
+
+/* styles each property detail row */
+.detail-item {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* styles the detail labels */
+.detail-label {
+    font-weight: 500;
+    width: 180px;
+    color: #666;
+}
+
+/* allows the detail value to use remaining space */
+.detail-value {
+    flex: 1;
+}
+
+/* styles the property description */
+.property-description {
+    line-height: 1.6;
+    color: #333;
+}
+
+/* keeps the sidebar visible while scrolling */
+.property-sidebar {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+/* styles sidebar sections */
+.open-houses-section,
+.listing-info-section {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* styles sidebar headings */
+.open-houses-section h3,
+.listing-info-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* displays open houses vertically */
+.open-houses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* styles each open house card */
+.open-house-item {
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+/* styles the open house date */
+.oh-date {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+/* styles the open house time */
+.oh-time {
+    color: #1976d2;
+    margin-bottom: 8px;
+}
+
+/* styles the open house remarks */
+.oh-remarks {
+    font-size: 14px;
+    color: #666;
+}
+
+/* styles the no open houses message */
+.no-open-houses {
+    color: #666;
+    font-style: italic;
+}
+
+/* displays listing info vertically */
+.listing-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* styles each listing information row */
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+/* styles listing information labels */
+.info-label {
+    font-weight: 500;
+    color: #666;
+}
+
+/* aligns listing information values */
+.info-value {
+    text-align: right;
+}
+
+/* styles the error container */
+.error-container {
+    max-width: 600px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 20px;
+}
+
+/* styles loading messages */
+.loading {
+    text-align: center;
+    padding: 100px 20px;
+    font-size: 18px;
+}
+
+/* changes layout for smaller screens */
+@media (max-width: 768px) {
+    .property-content {
+        grid-template-columns: 1fr;
+    }
+
+    .property-sidebar {
+        position: static;
+    }
+
+    .property-detail-page {
+        padding: 16px;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .detail-label {
+        width: auto;
+    }
+}

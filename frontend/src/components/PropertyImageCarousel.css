@@ -1,0 +1,120 @@
+/* styles the image carousel container */
+.carousel {
+    /* allows buttons and counter to be positioned inside the carousel */
+    position: relative;
+
+    /* fills the available space */
+    width: 100%;
+    height: 100%;
+
+    /* hides images outside the container */
+    overflow: hidden;
+
+    /* shows a light gray background behind images */
+    background: #f5f5f5;
+}
+
+/* styles the property image */
+.carousel-img {
+    /* fills the carousel */
+    width: 100%;
+    height: 100%;
+
+    /* crops the image to fit */
+    object-fit: cover;
+
+    /* removes extra spacing below the image */
+    display: block;
+}
+
+/* styles both carousel buttons */
+.carousel-btn {
+    /* places the buttons over the image */
+    position: absolute;
+
+    /* centers the buttons vertically */
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* gives the buttons a dark transparent background */
+    background: rgba(0, 0, 0, 0.45);
+
+    /* makes the arrow white */
+    color: white;
+
+    /* removes the default button border */
+    border: none;
+
+    /* increases the arrow size */
+    font-size: 24px;
+
+    /* adds space inside the button */
+    padding: 6px 12px;
+
+    /* shows a pointer when hovering */
+    cursor: pointer;
+
+    /* rounds the corners */
+    border-radius: 4px;
+
+    /* keeps the buttons above the image */
+    z-index: 2;
+
+    /* keeps the arrow vertically centered */
+    line-height: 1;
+}
+
+/* positions the previous button */
+.carousel-prev {
+    left: 6px;
+}
+
+/* positions the next button */
+.carousel-next {
+    right: 6px;
+}
+
+/* changes the button color when hovering */
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* styles the image counter */
+.carousel-counter {
+    /* positions the counter in the bottom right */
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+
+    /* gives the counter a dark background */
+    background: rgba(0, 0, 0, 0.5);
+
+    /* makes the text white */
+    color: white;
+
+    /* sets the text size */
+    font-size: 12px;
+
+    /* adds space around the text */
+    padding: 2px 7px;
+
+    /* rounds the counter */
+    border-radius: 10px;
+}
+
+/* displays a message when no images are available */
+.carousel-no-image {
+    /* centers the message */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* fills the carousel */
+    height: 100%;
+
+    /* colors the text gray */
+    color: #999;
+
+    /* sets the text size */
+    font-size: 14px;
+}

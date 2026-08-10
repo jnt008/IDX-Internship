@@ -1,5 +1,11 @@
+//import the property image carousel component
+import PropertyImageCarousel from "../components/PropertyImageCarousel";
+
 //import react hooks
 import React, { useEffect, useState } from "react";
+
+//import react router
+import { useNavigate } from "react-router-dom";
 
 //import the function that gets properties from the backend
 import { fetchProperties } from "../api/client";
@@ -153,7 +159,16 @@ function ListingsPage() {
 
 // Displays one individual property.
 function PropertyCard({ property }) {
+    // allows this card to navigate to another page
+    const navigate = useNavigate();
+
+    // tracks whether the image failed to load
     const [imageFailed, setImageFailed] = useState(false);
+
+    // runs when the user clicks the property card
+    const handleClick = () => {
+        navigate(`/property/${property.L_ListingID}`);
+    };
 
     let firstPhoto = null;
 
@@ -168,7 +183,10 @@ function PropertyCard({ property }) {
     }
 
     return (
-        <div className="property-card">
+        <div
+            className="property-card"
+            onClick={handleClick}
+        >
             <div className="property-image">
                 {firstPhoto && !imageFailed ? (
                     <img
