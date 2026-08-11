@@ -161,7 +161,7 @@ function PropertyImageGallery({ photos, address }) {
                     {/* display the current lightbox image */}
                     <img
                         src={photoList[lightboxIndex]}
-                        alt={`${address} photo ${lightboxIndex + 1}`}
+                        alt={`${address}  ${lightboxIndex + 1}`}
                         className="lightbox-img"
                         onClick={(e) => e.stopPropagation()}
                     />

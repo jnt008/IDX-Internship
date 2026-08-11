@@ -120,7 +120,7 @@
 /* highlights the selected thumbnail */
 .gallery-thumb.active {
     opacity: 1;
-    border-color: #1976d2;
+    border-color: #60339f;
 }
 
 /* styles the lightbox background */
