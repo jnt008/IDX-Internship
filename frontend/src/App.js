@@ -8,30 +8,35 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ListingsPage from "./pages/ListingsPage";
 import PropertyDetailPage from "./pages/PropertyDetailPage";
 
+// import the error boundary so it can catch errors anywhere in the app
+import ErrorBoundary from "./components/ErrorBoundary";
+
 // import the app's CSS
 import "./App.css";
 
 function App() {
     return (
-        <BrowserRouter>
-            <div className="App">
-                <Routes>
+        <ErrorBoundary>
+            <BrowserRouter>
+                <div className="App">
+                    <Routes>
 
-                    {/* home page */}
-                    <Route
-                        path="/"
-                        element={<ListingsPage />}
-                    />
+                        {/* home page */}
+                        <Route
+                            path="/"
+                            element={<ListingsPage />}
+                        />
 
-                    {/* individual property page */}
-                    <Route
-                        path="/property/:id"
-                        element={<PropertyDetailPage />}
-                    />
+                        {/* individual property page */}
+                        <Route
+                            path="/property/:id"
+                            element={<PropertyDetailPage />}
+                        />
 
-                </Routes>
-            </div>
-        </BrowserRouter>
+                    </Routes>
+                </div>
+            </BrowserRouter>
+        </ErrorBoundary>
     );
 }
 

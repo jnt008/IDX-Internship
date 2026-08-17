@@ -41,8 +41,14 @@ function ListingsPage() {
     //stores how many properties appear on each page
     const [itemsPerPage] = useState(20);
 
-    //load properties when the first page appears or filters change
-    useEffect(() => {loadProperties();}, [filters, currentPage]);
+    //stores which field the results should be sorted by
+    const [sortBy, setSortBy] = useState('');
+
+    //stores whether the sort is ascending or descending
+    const [sortOrder, setSortOrder] = useState('ASC');
+
+    //load properties when the first page appears, filters change, or sorting changes
+    useEffect(() => {loadProperties();}, [filters, currentPage, sortBy, sortOrder]);
 
     //request property data from the backend
     async function loadProperties() {
@@ -55,10 +61,12 @@ function ListingsPage() {
             const offset = (currentPage - 1) * itemsPerPage;
 
             // combine filters with pagination
+            // only include sortBy/sortOrder if a sort field is selected
             const params = {
                 ...filters,
                 limit: itemsPerPage,
-                offset: offset
+                offset: offset,
+                ...(sortBy && { sortBy, sortOrder })
             };
 
             //request the first 20 properties using the selected filters
@@ -101,6 +109,33 @@ function ListingsPage() {
 
             {/* Display the filter form and send searches to handleSearch. */}
             <PropertyFilters onSearch={handleSearch} />
+
+            {/* Lets the user choose which field to sort by, and the sort direction. */}
+            <div className="sort-controls">
+                <label>Sort by:</label>
+
+                <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                >
+                    <option value="">Default</option>
+                    <option value="L_SystemPrice">Price</option>
+                    <option value="ListingContractDate">Date Listed</option>
+                    <option value="LM_Int2_3">Size</option>
+                    <option value="L_Keyword2">Bedrooms</option>
+                </select>
+
+                {/* Only show the direction picker once a sort field is chosen. */}
+                {sortBy && (
+                    <select
+                        value={sortOrder}
+                        onChange={(e) => setSortOrder(e.target.value)}
+                    >
+                        <option value="ASC">Low to High</option>
+                        <option value="DESC">High to Low</option>
+                    </select>
+                )}
+            </div>
 
             {/* Show while waiting for the backend. */}
             {loading && (

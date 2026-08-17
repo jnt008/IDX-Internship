@@ -107,7 +107,7 @@ router.get('/:id', async (req, res) => {
 
 //GET /api/properties
 // this endpoint returns a page of properties from the database
-//supports pagination and filters
+//supports pagination, filters, and sorting
 router.get('/', async (req, res) => {
     try {
         //read the limit value from the URL (/api/properties?limit=5)
@@ -119,7 +119,7 @@ router.get('/', async (req, res) => {
         const offset = req.query.offset !== undefined ? parseInt(req.query.offset) : 0;
 
         //get filter values from the query string
-        const { city, zipcode, minPrice, maxPrice, beds, baths } = req.query;
+        const { city, zipcode, minPrice, maxPrice, beds, baths, sortBy, sortOrder } = req.query;
 
         //validate numeric inputs
         if (minPrice && isNaN(minPrice)) {
@@ -191,13 +191,28 @@ router.get('/', async (req, res) => {
             ? 'WHERE ' + conditions.join(' AND ')
             : '';
 
+        // build the ORDER BY clause
+        // only fields in this list are allowed to prevent SQL injection through sortBy
+        let orderClause = '';
+        const validSortFields = ['L_SystemPrice', 'ListingContractDate', 'LM_Int2_3', 'L_Keyword2'];
+        const validOrders = ['ASC', 'DESC'];
+
+        // only add sorting if sortBy is one of the allowed fields
+        if (sortBy && validSortFields.includes(sortBy)) {
+            //default to ascending order unless DESC is explicitly requested
+            const order = validOrders.includes(sortOrder?.toUpperCase())
+                ? sortOrder.toUpperCase()
+                : 'ASC';
+            orderClause = `ORDER BY ${sortBy} ${order}`;
+        }
+
         // count how many matching properties exist
         const countQuery = `SELECT COUNT(*) as total FROM rets_property ${whereClause}`;
         const [countResult] = await pool.query(countQuery, values);
         const total = countResult[0].total;
 
-        // get the matching property rows
-        const dataQuery = `SELECT * FROM rets_property ${whereClause} LIMIT ? OFFSET ?`;
+        // get the matching property rows, sorted and paginated
+        const dataQuery = `SELECT * FROM rets_property ${whereClause} ${orderClause} LIMIT ? OFFSET ?`;
         const [results] = await pool.query(dataQuery, [...values, limit, offset]);
 
         //send the results back to front end as JSON

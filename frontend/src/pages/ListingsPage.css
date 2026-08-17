@@ -18,6 +18,38 @@
     color: #d32f2f;
 }
 
+/* Display the sort controls in a row. */
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+/* Style the "Sort by:" label. */
+.sort-controls label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+}
+
+/* Style the sort dropdowns. */
+.sort-controls select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Highlight the dropdown border when it's focused. */
+.sort-controls select:focus {
+    outline: none;
+    border-color: #60339f;
+}
+
 /* Display property cards in a responsive grid. */
 .property-grid {
     display: grid;

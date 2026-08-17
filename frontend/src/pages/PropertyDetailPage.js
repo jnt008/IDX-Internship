@@ -171,71 +171,70 @@ function PropertyDetailPage() {
                 <div className="property-main">
 
 
-                    {/* main property statistics */}
-                    <div className="property-stats">
-
-                        {/* bedrooms */}
-                        <div className="stat">
-                            <div className="stat-value">
-                                {property.L_Keyword2}
-                            </div>
-
-                            <div className="stat-label">
-                                Bedrooms
-                            </div>
-                        </div>
-
-
-                        {/* bathrooms */}
-                        <div className="stat">
-                            <div className="stat-value">
-                                {property.LM_Dec_3}
-                            </div>
-
-                            <div className="stat-label">
-                                Bathrooms
-                            </div>
-                        </div>
-
-
-                        {/* square footage - only shown if the property has it */}
-                        {property.LM_Int2_3 && (
-                            <div className="stat">
-
-                                <div className="stat-value">
-                                    {property.LM_Int2_3.toLocaleString()}
-                                </div>
-
-                                <div className="stat-label">
-                                    Sq Ft
-                                </div>
-
-                            </div>
-                        )}
-
-
-                        {/* year built - only shown if available */}
-                        {property.YearBuilt && (
-                            <div className="stat">
-
-                                <div className="stat-value">
-                                    {property.YearBuilt}
-                                </div>
-
-                                <div className="stat-label">
-                                    Year Built
-                                </div>
-
-                            </div>
-                        )}
-
-                    </div>
-
-
-                    {/* additional property details */}
+                    {/* main property statistics + additional property details */}
                     <div className="property-section">
 
                         <h2>Property Details</h2>
+
+                        <div className="property-stats">
+
+                            {/* bedrooms */}
+                            <div className="stat">
+                                <div className="stat-value">
+                                    {property.L_Keyword2}
+                                </div>
+
+                                <div className="stat-label">
+                                    Bedrooms
+                                </div>
+                            </div>
+
+
+                            {/* bathrooms */}
+                            <div className="stat">
+                                <div className="stat-value">
+                                    {property.LM_Dec_3}
+                                </div>
+
+                                <div className="stat-label">
+                                    Bathrooms
+                                </div>
+                            </div>
+
+
+                            {/* square footage - only shown if the property has it */}
+                            {property.LM_Int2_3 && (
+                                <div className="stat">
+
+                                    <div className="stat-value">
+                                        {property.LM_Int2_3.toLocaleString()}
+                                    </div>
+
+                                    <div className="stat-label">
+                                        Sq Ft
+                                    </div>
+
+                                </div>
+                            )}
+
+
+                            {/* year built - only shown if available */}
+                            {property.YearBuilt && (
+                                <div className="stat">
+
+                                    <div className="stat-value">
+                                        {property.YearBuilt}
+                                    </div>
+
+                                    <div className="stat-label">
+                                        Year Built
+                                    </div>
+
+                                </div>
+                            )}
+
+                        </div>
+
 
                         <div className="detail-grid">
 
@@ -308,14 +307,13 @@ function PropertyDetailPage() {
                     </div>
 
 
-                    {/* property description */}
-                    {property.PublicRemarks && (
+                    {property.L_Remarks && (
                         <div className="property-section">
 
                             <h2>Description</h2>
 
                             <p className="property-description">
-                                {property.PublicRemarks}
+                                {property.L_Remarks}
                             </p>
 
                         </div>
