@@ -1,3 +1,8 @@
+import {
+    buildQueryString,
+    handleApiError,
+} from "../utils/api-helpers";
+
 // base URL for our backend
 // this is empty because React uses the proxy in package.json
 const API_BASE = "";
@@ -6,7 +11,7 @@ const API_BASE = "";
 export async function fetchProperties(params = {}) {
     try {
         //convert filters into URL query parameters
-        const query = new URLSearchParams(params).toString();
+        const query = buildQueryString(params);
 
         //build the API URL
         const url = `${API_BASE}/api/properties${query ? "?" + query : ""}`;
@@ -24,9 +29,9 @@ export async function fetchProperties(params = {}) {
         //return the JSON response
         return await response.json();
     } catch (error) {
-        //print error
-        console.error("API Error:", error);
-        throw error;
+        const message = handleApiError(error);
+        console.error("API Error:", message);
+        throw new Error(message);
     }
 }
 
@@ -48,9 +53,9 @@ export async function fetchPropertyDetail(listingId) {
         //return the JSON response
         return await response.json();
     } catch (error) {
-        //print error
-        console.error("API Error:", error);
-        throw error;
+        const message = handleApiError(error);
+        console.error("API Error:", message);
+        throw new Error(message);
     }
 }
 
@@ -72,8 +77,8 @@ export async function fetchOpenHouses(listingId) {
         //return the JSON response
         return await response.json();
     } catch (error) {
-        //print error
-        console.error("API Error:", error);
-        throw error;
+        const message = handleApiError(error);
+        console.error("API Error:", message);
+        throw new Error(message);
     }
 }
