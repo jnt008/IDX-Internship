@@ -1,5 +1,5 @@
 // import React hooks
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 // import tools from React Router
 // useParams gets the property ID from the URL
@@ -42,15 +42,8 @@ function PropertyDetailPage() {
     // stores an error message if something goes wrong
     const [error, setError] = useState(null);
 
-
-    // reload property information whenever the property ID changes
-    useEffect(() => {
-        loadPropertyData();
-    }, [id]);
-
-
     // gets the property and open house information from the backend
-    async function loadPropertyData() {
+    const loadPropertyData = useCallback(async () => {
         try {
             // show loading message while waiting
             setLoading(true);
@@ -81,8 +74,13 @@ function PropertyDetailPage() {
             // stop showing the loading message
             setLoading(false);
         }
-    }
+    }, [id]);
 
+    // reload property information whenever the property ID changes
+    // reload property information whenever the property ID changes
+    useEffect(() => {
+        loadPropertyData();
+    }, [loadPropertyData]);
 
     // show this message while the property is loading
     if (loading) {

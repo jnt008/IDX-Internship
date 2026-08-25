@@ -1,12 +1,3 @@
-//import the property image carousel component
-import PropertyImageCarousel from "../components/PropertyImageCarousel";
-
-//import react hooks
-import React, { useEffect, useState } from "react";
-
-//import react router
-import { useNavigate } from "react-router-dom";
-
 //import the function that gets properties from the backend
 import { fetchProperties } from "../api/client";
 
@@ -20,6 +11,8 @@ import Pagination from "../components/Pagination";
 import "./ListingsPage.css";
 
 import PropertyCard from "../components/PropertyCard";
+
+import React, { useCallback, useEffect, useState } from "react";
 
 function ListingsPage() {
     //stores the properties returned by backend
@@ -49,11 +42,8 @@ function ListingsPage() {
     //stores whether the sort is ascending or descending
     const [sortOrder, setSortOrder] = useState('ASC');
 
-    //load properties when the first page appears, filters change, or sorting changes
-    useEffect(() => {loadProperties();}, [filters, currentPage, sortBy, sortOrder]);
-
     //request property data from the backend
-    async function loadProperties() {
+    const loadProperties = useCallback(async () => {
         try {
             //show the loading msm and clear old erroes
             setLoading(true);
@@ -84,7 +74,10 @@ function ListingsPage() {
             //stop showing loading msg
             setLoading(false);
         }
-    }
+    }, [filters, currentPage, itemsPerPage, sortBy, sortOrder]);
+
+    //load properties when the first page appears, filters change, or sorting changes
+    useEffect(() => { loadProperties(); }, [loadProperties]);
 
     const handleSearch = (newFilters) => {
         // save new filters
