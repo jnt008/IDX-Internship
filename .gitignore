@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# SQL database files
+*.sql
+
+# Jest coverage reports
+coverage/

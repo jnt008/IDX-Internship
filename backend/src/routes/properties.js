@@ -138,11 +138,11 @@ router.get('/', async (req, res) => {
             return res.status(400).json({ error: 'baths must be a number' });
         }
 
-        if (limit < 1 || limit > 100) {
+        if (isNaN(limit) || limit < 1 || limit > 100) {
             return res.status(400).json({ error: 'limit must be between 1 and 100' });
         }
-        
-        if (offset < 0) {
+
+        if (isNaN(offset) || offset < 0) {
             return res.status(400).json({ error: 'offset cannot be negative' });
         }
 
