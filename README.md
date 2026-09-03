@@ -8,11 +8,8 @@ IDX-Internship is a full-stack real estate application that allows users to brow
 
 ### Screenshot
 
-Add a screenshot of the completed application here:
-
-```markdown
 ![IDX property listings](docs/images/PropertyListings.png)
-```
+
 
 ## Tech Stack
 
