@@ -1,8 +1,353 @@
 # IDX-Internship
 
-A Zillow/Redfin-style property search backend powered by real MLS data. This project uses Docker, MySQL, Node.js, Express, and MySQL2 to provide a REST API with pagination, filtering, input validation, and optimized database indexes.
+A Zillow/Redfin-style property search application powered by real MLS data. This project uses Docker, MySQL, Node.js, Express, MySQL2, and React to provide property searching, filtering, sorting, pagination, property details, image galleries, and open house information.
+
+## Project Description
+
+IDX-Internship is a full-stack real estate application that allows users to browse, filter, sort, and view detailed property listings from MLS data. Users can search by location, price, bedrooms, and bathrooms; navigate through paginated results; view property photos; and check available open houses.
+
+### Screenshot
+
+Add a screenshot of the completed application here:
+
+```markdown
+![IDX property listings](docs/images/property-listings.png)
+```
+
+## Tech Stack
+
+| Technology | Version | Purpose |
+|---|---:|---|
+| MySQL | 8.0 | Stores property and open house data |
+| Node.js | 18 or newer | Runs the backend and frontend tooling |
+| Express | 5.2.1 | Provides the REST API |
+| MySQL2 | 3.22.5 | Connects the backend to MySQL |
+| React | 19.2.7 | Builds the frontend interface |
+| React Router DOM | 7.18.2 | Handles frontend navigation |
+| Jest | 30.5.0 | Runs automated tests |
+| Docker Desktop | Current stable version | Runs MySQL locally |
+
+## Local Setup Instructions
+
+### Prerequisites
+
+Install the following on a fresh machine:
+
+- Git
+- Docker Desktop
+- Node.js 18 or newer
+- npm
+
+### 1. Clone the Repository
+
+```bash
+git clone YOUR_REPOSITORY_URL
+cd IDX-Internship
+```
+
+Replace `YOUR_REPOSITORY_URL` with the URL of the GitHub repository.
+
+### 2. Start the MySQL Database
+
+Start Docker Desktop. Then, from the project directory, run:
+
+```bash
+docker compose up -d
+```
+
+Verify that the MySQL container is running:
+
+```bash
+docker ps
+```
+
+### 3. Import the MLS Data
+
+Place `rets_property.sql` and `rets_openhouse.sql` inside the backend directory. These files are not included in the repository.
+
+Import the property data:
+
+```bash
+docker exec -i idx-mysql-local mysql -uroot -pYOUR_PASSWORD rets < rets_property.sql
+```
+
+Import the open house data:
+
+```bash
+docker exec -i idx-mysql-local mysql -uroot -pYOUR_PASSWORD rets < rets_openhouse.sql
+```
+
+Replace `YOUR_PASSWORD` with the MySQL root password.
+
+### 4. Configure the Backend
+
+Move into the backend directory and install its dependencies:
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file inside the backend directory:
+
+```env
+PORT=5001
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=YOUR_PASSWORD
+DB_NAME=rets
+```
+
+Replace `YOUR_PASSWORD` with the MySQL root password.
+
+Start the backend:
+
+```bash
+npm run dev
+```
+
+Verify that the backend and database are connected by opening:
+
+```text
+http://localhost:5001/api/health
+```
+
+Expected response:
+
+```json
+{
+  "status": "ok",
+  "database": "connected"
+}
+```
+
+### 5. Configure the Frontend
+
+Open another terminal and move into the frontend directory:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+The application opens at:
+
+```text
+http://localhost:3000
+```
+
+The frontend sends API requests to the backend through the proxy configured in `frontend/package.json`.
+
+## API Endpoint Reference
+
+### Health Check
+
+Checks whether the backend can connect to the database.
+
+```http
+GET /api/health
+```
+
+Example request:
+
+```text
+http://localhost:5001/api/health
+```
+
+Example response:
+
+```json
+{
+  "status": "ok",
+  "database": "connected"
+}
+```
+
+### List Properties
+
+Returns property listings with optional filters, sorting, and pagination.
+
+```http
+GET /api/properties
+```
+
+Supported query parameters:
+
+| Parameter | Description |
+|---|---|
+| `city` | Filters properties by city |
+| `zipcode` | Filters properties by ZIP code |
+| `minPrice` | Sets the minimum listing price |
+| `maxPrice` | Sets the maximum listing price |
+| `beds` | Filters by the exact number of bedrooms |
+| `baths` | Filters by the exact number of bathrooms |
+| `limit` | Sets the number of results returned |
+| `offset` | Sets the number of results skipped |
+| `sortBy` | Selects an approved property field for sorting |
+| `sortOrder` | Selects ascending or descending order |
+
+Example request:
+
+```text
+http://localhost:5001/api/properties?city=San%20Jose&minPrice=300000&beds=3&limit=20&offset=0
+```
+
+Example response:
+
+```json
+{
+  "total": 1,
+  "limit": 20,
+  "offset": 0,
+  "results": [
+    {
+      "L_ListingID": "123",
+      "L_Address": "123 Main Street",
+      "L_City": "San Jose",
+      "L_State": "CA",
+      "L_AskingPrice": 750000,
+      "L_Keyword2": 3,
+      "LM_Dec_3": 2
+    }
+  ]
+}
+```
+
+### Get One Property
+
+Returns the details of one property using its listing ID.
+
+```http
+GET /api/properties/:id
+```
+
+Example request:
+
+```text
+http://localhost:5001/api/properties/123
+```
+
+Example response:
+
+```json
+{
+  "L_ListingID": "123",
+  "L_Address": "123 Main Street",
+  "L_City": "San Jose",
+  "L_State": "CA",
+  "L_AskingPrice": 750000
+}
+```
+
+If the property does not exist, the endpoint returns HTTP 404.
+
+### Get Open Houses
+
+Returns the available open houses for a property.
+
+```http
+GET /api/properties/:id/openhouses
+```
+
+Example request:
+
+```text
+http://localhost:5001/api/properties/123/openhouses
+```
+
+Example response:
+
+```json
+{
+  "openhouses": [
+    {
+      "OH_StartDate": "2026-09-05",
+      "OH_EndDate": "2026-09-05",
+      "OH_StartTime": "13:00:00",
+      "OH_EndTime": "16:00:00",
+      "OH_Remarks": "Open house"
+    }
+  ]
+}
+```
+
+If the property has no scheduled open houses, the endpoint returns:
+
+```json
+{
+  "openhouses": []
+}
+```
+
+Invalid numeric parameters return HTTP 400, missing properties return HTTP 404, and unexpected server or database errors return HTTP 500.
+
+## Database Schema Summary
+
+### `rets_property`
+
+Stores property listing information.
+
+Important columns include:
+
+| Column | Description |
+|---|---|
+| `id` | Auto-incrementing database ID |
+| `L_ListingID` | Property listing ID used by the API |
+| `L_DisplayId` | Displayed MLS number |
+| `L_Address` | Property street address |
+| `L_City` | Property city |
+| `L_State` | Property state |
+| `L_Zip` | Property ZIP code |
+| `L_AskingPrice` | Property listing price |
+| `L_Keyword2` | Number of bedrooms |
+| `LM_Dec_3` | Number of bathrooms |
+| `L_Status` | Current listing status |
+| `L_PictureCount` | Number of property pictures |
+| `L_ListingDate` | Date the property was listed |
+
+### `rets_openhouse`
+
+Stores scheduled open house information.
+
+Important columns include:
+
+| Column | Description |
+|---|---|
+| `ListingId` | Listing ID associated with a property |
+| `OH_StartDate` | Open house start date |
+| `OH_EndDate` | Open house end date |
+| `OH_StartTime` | Open house start time |
+| `OH_EndTime` | Open house end time |
+| `OH_Remarks` | Additional open house information |
+
+### Table Relationship
+
+`rets_openhouse.ListingId` corresponds to `rets_property.L_ListingID`.
+
+Indexes on commonly searched property fields improve filtering and property lookup performance.
+
+## Known Issues
+
+- The MLS SQL data files must be obtained separately and imported manually.
+- Some listings have missing or invalid photo data and display a fallback message.
+- Open house information appears only when it exists in the imported MLS data.
+- The application currently runs locally and does not include production deployment configuration.
+- Property information may be incomplete when a field is missing from the original MLS data.
+
+## Future Improvements
+
+- Add user accounts and saved or favorite properties.
+- Add map-based property searching.
+- Add more advanced property filters.
+- Improve responsive styling for mobile devices.
+- Improve accessibility and image-loading performance.
+- Add continuous integration and automated deployment.
+- Increase frontend and backend test coverage.
 
 ---
+
+# Weekly Progress
 
 # Week 1 (6/15/2026) - Database Setup
 
@@ -824,402 +1169,3 @@ Expanded project documentation to include:
 - future improvements
 
 ---
-
-# Features
-
-Current application features include:
-
-- property search with filters
-- city and ZIP code filtering
-- price filtering
-- bedroom and bathroom filtering
-- paginated property results
-- property sorting
-- property cards
-- property detail pages
-- property image galleries
-- full-screen image lightbox
-- open house schedules
-- loading and error states
-- responsive frontend interface
-- frontend and backend testing
-
----
-
-# Prerequisites
-
-Before running the project, install:
-
-- Node.js 18+
-- npm
-- Docker Desktop
-- Git
-
----
-
-# Complete Setup Instructions
-
-## 1. Clone Repository
-
-```bash
-git clone <repository-url>
-cd idx-internship
-```
-
----
-
-## 2. Start Database
-
-Start the existing MySQL container:
-
-```bash
-docker start idx-mysql-local
-```
-
-Verify it is running:
-
-```bash
-docker ps
-```
-
-If setting up the database for the first time, import the MLS SQL datasets as described in Week 1.
-
----
-
-## 3. Backend Setup
-
-```bash
-cd backend
-npm install
-```
-
-Create `.env`:
-
-```env
-PORT=5001
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=YOUR_PASSWORD
-DB_NAME=rets
-```
-
-Start the backend:
-
-```bash
-npm run dev
-```
-
-Backend runs on:
-
-```text
-http://localhost:5001
-```
-
----
-
-## 4. Frontend Setup
-
-From the project root:
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-Frontend runs on:
-
-```text
-http://localhost:3000
-```
-
----
-
-# Running Tests
-
-## Backend Tests
-
-```bash
-cd backend
-npm test
-```
-
-## Frontend Tests
-
-```bash
-cd frontend
-npm test
-```
-
-Run frontend tests once with coverage:
-
-```bash
-npm test -- --coverage --watchAll=false
-```
-
----
-
-# Project Structure
-
-```text
-idx-internship/
-├── backend/
-│   ├── src/
-│   │   ├── db/
-│   │   │   └── mysql.js
-│   │   ├── routes/
-│   │   │   └── properties.js
-│   │   └── index.js
-│   ├── .env
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── client.js
-│   │   ├── components/
-│   │   │   ├── ErrorBoundary.js
-│   │   │   ├── Pagination.js
-│   │   │   ├── PropertyCard.js
-│   │   │   ├── PropertyFilters.js
-│   │   │   └── PropertyImageGallery.js
-│   │   ├── pages/
-│   │   │   ├── ListingsPage.js
-│   │   │   └── PropertyDetailPage.js
-│   │   ├── utils/
-│   │   │   └── api-helpers.js
-│   │   └── App.js
-│   └── package.json
-│
-└── README.md
-```
-
----
-
-# API Endpoints
-
-## GET /api/health
-
-Checks whether the backend can connect to MySQL.
-
-Example:
-
-```text
-http://localhost:5001/api/health
-```
-
----
-
-## GET /api/properties
-
-Returns a paginated list of properties with optional filtering and sorting.
-
-### Query Parameters
-
-| Parameter | Description |
-|-----------|-------------|
-| `limit` | Number of results, default 20 |
-| `offset` | Number of properties to skip, default 0 |
-| `city` | Filter by city |
-| `zipcode` | Filter by ZIP code |
-| `minPrice` | Minimum price |
-| `maxPrice` | Maximum price |
-| `beds` | Number of bedrooms |
-| `baths` | Number of bathrooms |
-| `sortBy` | Database field used for sorting |
-| `sortOrder` | `ASC` or `DESC` |
-
-Example:
-
-```text
-GET /api/properties?city=San%20Jose&minPrice=300000&beds=3
-```
-
----
-
-## GET /api/properties/:id
-
-Returns details for a single property.
-
-Example:
-
-```text
-GET /api/properties/123
-```
-
-A nonexistent property returns HTTP 404.
-
----
-
-## GET /api/properties/:id/openhouses
-
-Returns the open house schedule for a property.
-
-Example:
-
-```text
-GET /api/properties/123/openhouses
-```
-
-If the property has no open houses, the endpoint returns an empty open house array.
-
----
-
-# Architecture Decisions
-
-## Why Docker for MySQL?
-
-Docker provides:
-
-- a consistent MySQL environment
-- easier database setup
-- isolation from other local databases
-- simple start and stop commands
-- easier database recreation
-
----
-
-## Why Pagination?
-
-The MLS database contains a large number of property records.
-
-Pagination:
-
-- prevents loading the entire dataset at once
-- reduces backend and database load
-- reduces network traffic
-- improves frontend performance
-- provides a better browsing experience
-
----
-
-## Why React Router?
-
-React Router provides:
-
-- clean URLs for property detail pages
-- normal browser Back and Forward behavior
-- navigation without full page reloads
-- an easy way to add additional pages later
-
----
-
-## Why Separate API Functions?
-
-API requests are stored in `client.js` instead of directly inside React components.
-
-This:
-
-- keeps components easier to read
-- avoids duplicated request code
-- makes API requests easier to test
-- separates frontend display logic from network logic
-
----
-
-## Why Validate Sorting Fields?
-
-The backend only allows approved values for `sortBy`.
-
-This prevents users from inserting arbitrary values into the SQL `ORDER BY` clause and keeps sorting predictable.
-
----
-
-# Known Issues / Future Improvements
-
-Potential future improvements include:
-
-- user authentication
-- saved properties
-- saved searches
-- additional property sorting options
-- improved mobile responsive design
-- additional accessibility improvements
-- expanded backend and frontend testing
-- map-based property searching
-
-Property image galleries have already been implemented.
-
----
-
-# Troubleshooting
-
-## Backend Won't Start
-
-Make sure MySQL is running:
-
-```bash
-docker ps
-```
-
-If the container is stopped:
-
-```bash
-docker start idx-mysql-local
-```
-
-Verify the `.env` file contains the correct database credentials.
-
-Also make sure port `5001` is available.
-
----
-
-## Frontend Cannot Reach Backend
-
-Verify the backend is running:
-
-```text
-http://localhost:5001/api/health
-```
-
-Check the proxy configuration in:
-
-```text
-frontend/package.json
-```
-
-Restart the React development server after changing proxy settings.
-
----
-
-## Tests Failing After Installing Dependencies
-
-Remove and reinstall dependencies:
-
-```bash
-rm -rf node_modules
-npm install
-```
-
-Check the installed Node version:
-
-```bash
-node --version
-```
-
-Node.js 18+ is recommended.
-
----
-
-## React Router Errors
-
-If React Router cannot be found, reinstall the project dependencies:
-
-```bash
-cd frontend
-npm install
-```
-
-Then restart the development server.
-
----
-
-# Contributors
-
-Janie Tran - Initial development
-
----
-
-# License
-
-This project was created for educational purposes as part of the IDX Exchange internship program.
